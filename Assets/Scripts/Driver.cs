@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
+using TMPro;
 public class Driver : MonoBehaviour
 {
     [SerializeField] float moveSpeed = 5f;
@@ -14,11 +14,13 @@ public class Driver : MonoBehaviour
     [SerializeField] float boostMultiplier = 2f;
     [SerializeField] float timeoutSeconds = 3f;
     float currentMoveSpeed;
+    [SerializeField] TMP_Text boostText;
     Coroutine boostCoroutine;
 
     void Start()
     {
         currentMoveSpeed = moveSpeed;
+        boostText.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -75,6 +77,7 @@ public class Driver : MonoBehaviour
         if(collision.CompareTag("Boost") && !hasBoost)
         {
             hasBoost = true;
+            boostText.gameObject.SetActive(true);
             currentMoveSpeed = moveSpeed * boostMultiplier;
             boostCoroutine = StartCoroutine(BoostTimeout());
 
@@ -93,6 +96,7 @@ public class Driver : MonoBehaviour
             StopCoroutine(boostCoroutine);
             boostCoroutine = null;
         }
+        boostText.gameObject.SetActive(false);
     }
 
     void MoveCarForward(float moveAmount)
